@@ -10,15 +10,17 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class LionDoesHaveManeParametrizedTest {
-    @Parameterized.Parameter
-    public String sex;
-
-    @Parameterized.Parameters(name = "{index}: значение пола" )
-    public static Object[] sexLion() {
-        return new Object[] {
-                "Самец",
-                "Самка",
-                "Male;"
+    private final String sex;
+    private final boolean result;
+    public LionDoesHaveManeParametrizedTest(String sex, boolean result){
+        this.sex = sex;
+        this.result = result;
+    }
+    @Parameterized.Parameters
+    public static Object[][] getTestData() {
+        return new Object[][]{
+                {"Самец", true},
+                {"Самка", false}
         };
     }
     @Before
@@ -29,20 +31,8 @@ public class LionDoesHaveManeParametrizedTest {
     Feline feline;
     @Test
     public void testDoesHaveMane() throws Exception {
-        try {
-            Lion lion = new Lion(sex, feline);
-            Boolean expectedResult = null;
-
-            if (sex.equals("Самец")) {
-                expectedResult = true;
-            } else if (sex.equals("Самка")) {
-                expectedResult = false;
-            }
-            assertEquals(expectedResult, lion.doesHaveMane());
-        }
-        catch (Exception exception) {
-            System.out.println("Используйте допустимые значения пола животного - самец или самка");
-        }
+        Lion lion = new Lion(sex, feline);
+        assertEquals(result, lion.doesHaveMane());
     }
 
 
